@@ -59,4 +59,18 @@ contract MorphoPythOracleTest is Test {
     function testInitialSetup() public {
         assertTrue(address(oracle) != address(0), "Oracle not deployed");
     }
+
+    function testPythOracleWbtcUsdt() public {
+        assertEq(
+            oracle.price(),
+            ((uint256(int256(mockPyth.getPriceUnsafe(pythWbtcUsdFeed).price))) *
+                10 **
+                    (36 +
+                        pythUsdtUsdTokenDecimals +
+                        uint256(-1 * int256(-6)) -
+                        pythWbtcUsdTokenDecimals -
+                        uint256(-1 * int256(-8)))) /
+                uint256(int256(mockPyth.getPriceUnsafe(pythUsdtUsdFeed).price))
+        );
+    }
 }
